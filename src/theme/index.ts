@@ -9,7 +9,7 @@ export default {
       RED_DARK: '#AA2834',
   
       GRAY_700: '#121214',
-      GRAY_600: 'red',
+      GRAY_600: '#202024',
       GRAY_500: '#29292E',
       GRAY_400: '#323238',
       GRAY_300: '#7C7C8A',
