@@ -1,10 +1,9 @@
 import React from "react";
-
 import { FlatList } from "react-native";
-import { Header } from "@components/Header";
-import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
-import { Highlight } from "@components/Highlight";
+import { useRoute } from "@react-navigation/native";
 
+import { Header } from "@components/Header";
+import { Highlight } from "@components/Highlight";
 import { ButtonIcon } from "@components/ButtonIcon";
 import { Input } from "@components/Input";
 import { Filter } from "@components/Filter";
@@ -12,15 +11,26 @@ import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
 
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+
+type RouteParams = {
+  group: string;
+};
+
+
 export function Players() {
   const [team, setTeam] = React.useState("Time A");
   const [players, setPlayers] = React.useState([]);
+
+  const route = useRoute(); // Passa os parametros da rota
+  const { group } = route.params as RouteParams;
+
   return (
     <Container>
       <Header showBackButton />
 
       <Highlight
-        title="Nome da turma"
+        title={group}
         subtitle="adiciona a galera e separe os times"
       />
 
@@ -44,7 +54,7 @@ export function Players() {
           horizontal
         />
 
-        <NumbersOfPlayers>{players.length}</NumbersOfPlayers>
+        <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
 
       <FlatList
