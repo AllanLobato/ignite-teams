@@ -7,11 +7,11 @@ import React from "react";
 
 // Na linha 8, o inputRef é um objeto do tipo React.RefObject<TextInput> que é passado como parâmetro para o componente Input.
 type Props = TextInputProps & {	
-    inputRef?: React.RefObject<TextInput>;
-
+    inputRef?: React.RefObject<TextInput>; // O inputRef é passado como parâmetro para o componente Input.
+}
   
 
-export function Input({inputRef, ...rest }: Props) {   // O inputRef é passado como parâmetro para o componente Input.
+export function Input({inputRef, ...rest }: Props) {
     const { COLORS } = useTheme();
 
 
@@ -20,9 +20,7 @@ export function Input({inputRef, ...rest }: Props) {   // O inputRef é passado 
         ref={inputRef} // O inputRef é passado como parâmetro para o componente Input.
         placeholderTextColor={COLORS.GRAY_300}
         {...rest}
-        >
+        />
             
-            
-        </Container>
     );
     }

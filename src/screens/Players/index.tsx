@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Alert, FlatList, TextInput } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
@@ -48,11 +47,10 @@ export function Players() {
     };
 
     try {
-      await playerAddByGroup(newPlayer, group); // Adiciona a nova pessoa
+      await playerAddByGroup(newPlayer, group);
 
       newPlayerNameInputRef.current?.blur(); // Remove o foco do input
       //Keyboard.dismiss(); // Fecha o teclado
-
       setNewPlayerName("");
       fetchPlayersByTeam();
 
@@ -77,10 +75,12 @@ export function Players() {
       console.log(error);
       Alert.alert("Pessoas", "Ocorreu um erro ao buscar as pessoas.");
     }
+  }
 
     useEffect(() => {
       fetchPlayersByTeam();
     }, [team]);
+
 
   return (
     <Container>
@@ -116,14 +116,16 @@ export function Players() {
           horizontal
         />
 
-        <NumberOfPlayers>{players.length}</NumberOfPlayers>
+        <NumberOfPlayers>
+          {players.length}
+        </NumberOfPlayers>
       </HeaderList>
 
       <FlatList
         data={players}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item} onRemove={() => {}} />
+          <PlayerCard name={item.name} onRemove={() => {}} />
         )}
         ListEmptyComponent={() => (
           <ListEmpty message="Não há pessoas nesse time" />
@@ -139,3 +141,6 @@ export function Players() {
     </Container>
   );
 }
+
+
+
