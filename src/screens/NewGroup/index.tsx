@@ -6,7 +6,7 @@ import { Highlight } from "@components/Highlight";
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { groupCreate } from "@storage/group/groupCreate";
-import App from "App";
+
 import { AppError } from "@utils/AppError";
 import { Alert } from "react-native";
 

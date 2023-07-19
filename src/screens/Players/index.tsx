@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Alert, FlatList, TextInput } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { Alert, FlatList, TextInput, Text } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 import { AppError } from "@utils/AppError";
 
@@ -18,6 +18,8 @@ import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { playerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
+import { groupRemoveByName } from "@storage/group/groupRemoveByName";
 
 type RouteParams = {
   group: string;
@@ -28,6 +30,7 @@ export function Players() {
   const [team, setTeam] = useState("Time A");
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
 
+  const navigation = useNavigation();
   const route = useRoute(); // Passa os parametros da rota
   const { group } = route.params as RouteParams;
 
@@ -47,7 +50,7 @@ export function Players() {
     };
 
     try {
-      await playerAddByGroup(newPlayer, group);
+      await playerAddByGroup(group, newPlayer); // Adiciona a nova pessoa no storage
 
       newPlayerNameInputRef.current?.blur(); // Remove o foco do input
       //Keyboard.dismiss(); // Fecha o teclado
@@ -77,9 +80,45 @@ export function Players() {
     }
   }
 
+  async function handleRemovePlayer(playerName: string) {
+    try {
+      await playerRemoveByGroup(playerName, group);
+      fetchPlayersByTeam();
+
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover Pessoa", "Ocorreu um erro ao remover a pessoa.");
+
+    }
+  }
+
+  async function groupRemove() {
+    try {
+      await groupRemoveByName(group);
+      navigation.navigate('groups')
+      Alert.alert("Remover Turma", "Turma removida com sucesso.");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover Turma", "Ocorreu um erro ao remover a turma.");
+    }
+  }
+
+
+  async function handleRemoveGroup() {
+    Alert.alert(
+      "Remover Turma",
+      "Tem certeza que deseja remover essa turma?",
+      [
+        { text: "Não", style: "cancel" },
+        { text: "Sim", onPress: () => groupRemove() },
+      ]
+    );
+  }
+
     useEffect(() => {
       fetchPlayersByTeam();
     }, [team]);
+
 
 
   return (
@@ -125,8 +164,12 @@ export function Players() {
         data={players}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item.name} onRemove={() => {}} />
+          <PlayerCard 
+          name={item.name} 
+          onRemove={() => handleRemovePlayer(item.name)} 
+          />
         )}
+
         ListEmptyComponent={() => (
           <ListEmpty message="Não há pessoas nesse time" />
         )}
@@ -137,7 +180,11 @@ export function Players() {
         ]}
       />
 
-      <Button title="Remover Turma" type="SECONDARY" />
+      <Button 
+      title="Remover Turma" 
+      type="SECONDARY" 
+      onPress={handleRemoveGroup}
+      />
     </Container>
   );
 }
