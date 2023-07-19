@@ -3,6 +3,7 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { GroupCard } from "@components/GroupCard";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { Alert } from "react-native";
 
 import { Container } from "./styles";
 
@@ -30,10 +31,11 @@ export function Groups() {
       const data = await groupsGetAll();
 
       setGroups(data);
-      setIsLoading(false);
-
     }catch(error){
       console.log(error);
+      Alert.alert("Não foi possível carregar os grupos");
+    }finally{
+      setIsLoading(false);
     }
   }
 

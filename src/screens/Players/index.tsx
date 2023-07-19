@@ -77,11 +77,14 @@ export function Players() {
       setIsLoading(true); // Mostra o loading na tela
 
       const playersByTeam = await playerGetByGroupAndTeam(group, team);
+
       setPlayers(playersByTeam);
-      setIsLoading(false); // Esconde o loading na tela
+
     }catch(error){
       console.log(error);
       Alert.alert("Pessoas", "Ocorreu um erro ao buscar as pessoas.");
+    } finally{
+      setIsLoading(false); // Esconde o loading da tela
     }
   }
 
